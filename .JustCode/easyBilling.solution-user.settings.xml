@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<JustCodeSettings Version="0.0.6" Timestamp="9e437597-c553-4a1a-90a8-d5da45a30e0a">
+  <IgnoredErrorsAndWarningsSettings xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <IgnoredErrorsAndWarnings>
+      <FilePath>
+        <Path>J:\Projects\My Projects\Client Project\easyBilling\easyBilling\easyBilling\Validators\SelectedIndexVal.cs</Path>
+        <ProjectFullName>J:\Projects\My Projects\Client Project\easyBilling\easyBilling\easyBilling\easyBilling.csproj</ProjectFullName>
+        <IgnoredElement>
+          <Column>16</Column>
+          <Text>No suitable member found to override</Text>
+          <Line>17</Line>
+        </IgnoredElement>
+      </FilePath>
+      <FilePath>
+        <Path>J:\Projects\My Projects\Client Project\easyBilling\easyBilling\easyBilling\Views\BillEntryView.xaml.cs</Path>
+        <ProjectFullName>J:\Projects\My Projects\Client Project\easyBilling\easyBilling\easyBilling\easyBilling.csproj</ProjectFullName>
+        <IgnoredElement>
+          <Column>17</Column>
+          <Text>A condition must be of type &lt;/C&gt;bool&lt;//C&gt;</Text>
+          <Line>304</Line>
+        </IgnoredElement>
+      </FilePath>
+    </IgnoredErrorsAndWarnings>
+  </IgnoredErrorsAndWarningsSettings>
+</JustCodeSettings>

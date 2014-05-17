@@ -1,0 +1,13 @@
+﻿<Window x:Class="easyBilling.ReportView.ReportView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        
+        xmlns:my="clr-namespace:Telerik.ReportViewer.Wpf;assembly=Telerik.ReportViewer.Wpf"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        
+        Title="ReportView" Height="300" Width="300" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    
+    <Grid>
+        <my:ReportViewer x:Name="rv1" telerik:StyleManager.Theme="Metro"/>
+    </Grid>
+</Window>

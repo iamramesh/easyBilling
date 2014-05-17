@@ -1,0 +1,464 @@
+﻿<Window x:Class="easyBilling.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:hp="clr-namespace:easyBilling.Helper"
+        xmlns:local="clr-namespace:easyBilling"
+        
+        Title="easyBilling System | Munna Vegetables" Height="650" Width="950" 
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" 
+        MinWidth="950" MinHeight="650" Icon="/easyBilling;component/Images/Logo/easyBilling.ico" Closing="Window_Closing">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWindow.cmdTab}"
+                        Executed="ExecuteCmdTab"
+                        CanExecute="CanExecuteCmdTab"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <!--<KeyBinding Key="T" Modifiers="Shift" CommandParameter="tab"
+					Command="{x:Static local:MainWindow.cmdTab}" />-->
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <Style x:Key="CloseButton" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="MouseOverBeginStoryboard">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+													Storyboard.TargetProperty="(UIElement.Visibility)"
+													Storyboard.TargetName="FocusEllipse">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ColorAnimation Duration="0" To="LightGray"
+													Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+													Storyboard.TargetName="FocusEllipse" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="MouseOverBeginStoryboard" />
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="IsPressedBeginStoryboard">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames
+													Storyboard.TargetProperty="(UIElement.Visibility)"
+													Storyboard.TargetName="FocusEllipse">
+                                                <DiscreteObjectKeyFrame KeyTime="0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ColorAnimation Duration="0" To="DarkGray"
+													Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)"
+													Storyboard.TargetName="FocusEllipse" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="IsPressedBeginStoryboard" />
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                        <Grid Background="Transparent" Width="14" Height="14">
+                            <Ellipse x:Name="FocusEllipse" Fill="#FFF13535" Visibility="Collapsed" />
+                            <ContentPresenter x:Name="ContentPresenter"
+									Content="{TemplateBinding Content}" HorizontalAlignment="Center"
+									VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="TabItemTemplate">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Image Source="{Binding Path=ImgUrl}" Stretch="Fill" Height="16" Width="16" Margin="0,0,4,0">
+                </Image>
+                <TextBlock Text="{Binding Header}" />
+                <Button Command="{Binding RemoveItemCommand}" Style="{StaticResource CloseButton}"
+						Margin="10,0,0,0" ToolTipService.ToolTip="Remove item">
+                    <Button.Content>
+                        <Path Data="M0,0 L6,6 M6, 0 L0,6" Stroke="Black" StrokeThickness="1"
+								SnapsToDevicePixels="True" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ContentTemplate">
+            <Grid>
+                <ContentControl Content="{Binding UIControl}" />
+            </Grid>
+        </DataTemplate>
+
+        <Storyboard x:Key="sb_Enter" Completed="sb_Enter_Completed">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="gridDtTm">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseOut" Amplitude="0.5"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="sb_Exit" Completed="sb_Exit_Completed">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="-211">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="gridDtTm">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="470">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseIn" Amplitude="0.5"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="sb_UnLoad" Completed="sb_UnLoad_Completed">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="txtLoading">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-146">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="sb_ImgEnter">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="imgLogoLogin">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="sb_ImgExit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="imgLogoLogin">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="-248">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="7"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <telerik:RadMenu x:Name="radMenu" Grid.Row="0" ItemClick="RadMenu_ItemClick">
+            <telerik:RadMenuItem Header="_General">
+                <telerik:RadMenuItem Header="Homepage" >
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/home.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+                
+                <telerik:RadMenuItem Header="Get Started">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/video.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+                <telerik:RadMenuItem IsSeparator="True"/>
+                
+                <telerik:RadMenuItem Header="Exit">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/shut_down.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+            </telerik:RadMenuItem>
+            <telerik:RadMenuItem Header="_Tab's">
+                <telerik:RadMenuItem Header="Bill Entry" >
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/pencil.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+
+                <telerik:RadMenuItem Header="Customer Entry">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/page.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+
+                <telerik:RadMenuItem Header="Item Entry">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/pencil.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+            </telerik:RadMenuItem>
+            
+            <telerik:RadMenuItem Header="R_eports">
+                <telerik:RadMenuItem Header="Sales Report">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/chart.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+
+                <telerik:RadMenuItem Header="Print Bill">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/print.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+            </telerik:RadMenuItem>
+            
+            <!--<telerik:RadMenuItem Header="T_ools">
+                <telerik:RadMenuItem Header="Print">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/print.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+                <telerik:RadMenuItem Header="Settings">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/tools.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+            </telerik:RadMenuItem>-->
+            
+            <telerik:RadMenuItem Header="_Help">
+                <telerik:RadMenuItem Header="About easyBilling">
+                    <telerik:RadMenuItem.Icon>
+                        <Image Source="Images/Logo/easyBilling_24.png" Stretch="Fill" Height="16" Width="16"/>
+                    </telerik:RadMenuItem.Icon>
+                </telerik:RadMenuItem>
+            </telerik:RadMenuItem>
+
+            <!--<telerik:RadMenuItem Header="_Log Out" HorizontalAlignment="Right">
+            </telerik:RadMenuItem>-->
+
+            <telerik:RadMenu.Effect>
+                <DropShadowEffect ShadowDepth="0" />
+            </telerik:RadMenu.Effect>
+        </telerik:RadMenu>
+
+        <TextBlock x:Name="txtLogOut" Text="Log Out" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                   Margin="0,0,7,0" Style="{StaticResource TextBlockStyle_Widget1}" Cursor="Hand" 
+                   MouseLeftButtonDown="txtLogOut_MouseLeftButtonDown"/>
+
+        <!--<Border Grid.Row="1" Height="7" BorderBrush="#FFDADADA" BorderThickness="1" Background="#CCF3F3F3"/>-->
+
+        <telerik:RadTabControl Grid.Row="2" Margin="0" x:Name="tabControl" ItemsSource="{Binding Tabs}" OverflowMode="Wrap" ContentTemplate="{StaticResource ContentTemplate}"
+			ItemTemplate="{StaticResource TabItemTemplate}" KeyDown="tabControl_KeyDown" MouseMove="tabControl_MouseMove">
+            <telerik:RadTabControl.ItemContainerStyle>
+                <Style TargetType="telerik:RadTabItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+            </telerik:RadTabControl.ItemContainerStyle>
+        </telerik:RadTabControl>
+
+        <Grid Grid.Row="3">
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFAD499C" Offset="1"/>
+                        <GradientStop Color="#FF79256B" Offset="0.8"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Path Data="M0.5,12.123379 L222.42691,12.123379 L222.50447,37.605885 C176.70126,29.843027 107.90886,19.052942 0.5,19.052942 z" Height="28.501" Stretch="Fill" VerticalAlignment="Center">
+                <Path.Fill>
+                    <LinearGradientBrush EndPoint="0.501,0.859" StartPoint="0.5,-0.011">
+                        <GradientStop Color="#FF8E347D" Offset="1"/>
+                        <GradientStop Color="#0079256B" Offset="0.12"/>
+                    </LinearGradientBrush>
+                </Path.Fill>
+            </Path>
+            <!--<Rectangle HorizontalAlignment="Right" Width="9">
+                <Rectangle.OpacityMask>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Offset="0.011"/>
+                        <GradientStop Color="White" Offset="0.121"/>
+                    </LinearGradientBrush>
+                </Rectangle.OpacityMask>
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.081,0.314" StartPoint="1.063,0.296">
+                        <GradientStop Color="#FF600751" Offset="0.185"/>
+                        <GradientStop Color="#0070125E" Offset="0.598"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>-->
+            <Grid VerticalAlignment="Center">
+                <TextBlock Text="Created by Ramesh C Parmar | Rp2-Softwares 2012" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Margin="5,1,1,1" Style="{StaticResource TextBlockStyle_search}"/>
+
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="1,1,5,1" Style="{StaticResource TextBlockStyle_search}">
+                        <Run Text="Build Version :"/>
+                        <Run x:Name="txtBottomVersion" Text="1.0.1"/>
+                </TextBlock>
+            </Grid>
+        </Grid>
+
+        <Border x:Name="bdAbout" Grid.Row="0" Grid.RowSpan="4" Background="#AEFFFFFF" Visibility="Collapsed" KeyDown="bdAbout_KeyDown"
+                MouseLeftButtonDown="bdAbout_MouseLeftButtonDown">
+
+            <Border BorderBrush="#FFDADADA" BorderThickness="1" Width="482" Height="340">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="White" Offset="0.05"/>
+                        <GradientStop Color="#FFF7F7F7"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Stretch="Fill" Source="Images/Logo/OG_Logo WithOut Reg 2.png" Width="240"/>
+
+                    <Image Grid.Column="0" Grid.Row="1" Source="/Images/Logo/easyBilling_128.png" 
+                           VerticalAlignment="Top" Height="90" Width="90" Stretch="Fill"/>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="5,0,0,0" >
+                        <TextBlock Text="easyBilling System" FontSize="37" FontFamily="/easyBilling;component/Fonts/#Forelle" 
+                                    VerticalAlignment="Center" />
+                        <TextBlock Text="End User Edition" FontSize="15" />
+                        <TextBlock FontSize="15">
+                            <Run Text="Version:"/>
+                            <Run x:Name="txtAbtVersion" Text="Version:"/>
+                        </TextBlock>
+                        <TextBlock Text="Licensed to: Munna Vegetables Pvt Ltd" FontSize="15" />
+                        <Border BorderBrush="#FFD6D6D6" BorderThickness="0,0,0,1" Margin="-10,5,-10,5"/>
+                        <TextBlock Text="Rp2-Softwares 2012" FontSize="13.5" />
+                        <Border BorderBrush="#FFD6D6D6" BorderThickness="0,0,0,1" Margin="-10,5,-10,5"/>
+                        <TextBlock Text="Created by Ramesh C Parmar" FontSize="13.5" />
+                        <TextBlock Text="| www.rp2softwares.com" FontSize="13.5" />
+                        <TextBlock Text="| iamramesh@live.in" FontSize="13.5" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <Border x:Name="bdLogin" Grid.Row="0" Grid.RowSpan="4" Background="#AEFFFFFF" Visibility="Visible">
+            <Grid>
+                <Image x:Name="imgLogoLogin" Stretch="Uniform" Source="Images/Logo/OG_Logo WithOut Reg 2.png" Width="240" 
+                       VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,25" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="-248"/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+
+                <Grid x:Name="gridLoading" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.Clip>
+                        <RectangleGeometry Rect="0,0,147,25" />
+                    </Grid.Clip>
+
+                    <TextBlock x:Name="txtLoading" Text="Please wait ..." FontSize="25" FontFamily="VAGRounded Light" 
+                               Foreground="#FF727171" RenderTransformOrigin="0.5,0.5" >
+                        <TextBlock.RenderTransform>
+                	        <TransformGroup>
+                		        <ScaleTransform/>
+                		        <SkewTransform/>
+                		        <RotateTransform/>
+                		        <TranslateTransform/>
+                	        </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Grid>
+
+                <Grid x:Name="gridDtTm" HorizontalAlignment="Right" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform X="470"/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,110">
+                        <Run FontSize="20" FontFamily="VAGRounded Light" Text="Today" Foreground="#FF898888" FontWeight="SemiBold"/>
+                        <LineBreak />
+                        <Run x:Name="txtDate" FontSize="30" FontFamily="VAGRounded Bold" Text="Wednesday 11 February" Foreground="#FF727171" />
+                    </TextBlock>
+
+                    <TextBlock x:Name="txtTime" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="12:35:20 PM" 
+                           FontSize="85" FontFamily="VAGRounded Light" Foreground="#FFA3A3A3" Margin="0,0,2,25">
+                    </TextBlock>
+                </Grid>
+
+                <Border Width="400" Height="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border.Clip>
+                        <RectangleGeometry Rect="0,0,400,300" />
+                    </Border.Clip>
+
+                    <Grid x:Name="grid" Width="250" Height="auto" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform Y="-211"/>
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Grid.RowSpan="4" BorderBrush="#FFDADADA" BorderThickness="1" Background="White"/>
+
+                        <StackPanel Grid.Row="1" Margin="10">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                <Image Source="/Images/user_16x16.png" Height="16" Width="16" Stretch="Fill" />
+                                <TextBlock x:Name="txtUser" Text="eCourier" Style="{StaticResource TextBlockStyle}" Margin="4,0,0,0"/>
+                            </StackPanel>
+                            <!--<telerik:RadMaskedTextBox MaskType="None"/>-->
+                            <PasswordBox x:Name="txtPass" FontFamily="Segoe UI" KeyDown="txtPass_KeyDown"/>
+                        </StackPanel>
+
+                        <telerik:RadButton x:Name="btnLogin" Grid.Row="2" Height="23" Width="100" Content="Login" Click="RadButton_Click" 
+                                           Margin="0,0,0,10"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

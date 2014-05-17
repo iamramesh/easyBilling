@@ -1,0 +1,262 @@
+﻿<UserControl x:Class="easyBilling.Views.StockItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             
+             xmlns:val="http://blogs.infosupport.com/blogs/willemm/validationframework"
+             xmlns:val1="clr-namespace:easyBilling.Validators"
+             xmlns:local="clr-namespace:easyBilling.Views"
+             xmlns:vc="clr-namespace:easyBilling.ValueConverters"
+             
+             mc:Ignorable="d" Loaded="UserControl_Loaded" d:DesignWidth="800">
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:BillEntryView.cmdAdd}"
+                        Executed="ExecuteCmdAdd"
+                        CanExecute="CanExecuteCmdAdd"/>
+        <CommandBinding Command="{x:Static local:BillEntryView.cmdSave}"
+                        Executed="ExecuteCmdSave"
+                        CanExecute="CanExecuteCmdSave"/>
+        <CommandBinding Command="{x:Static local:BillEntryView.cmdDelete}"
+                        Executed="ExecuteCmdDelete"
+                        CanExecute="CanExecuteCmdDelete"/>
+        <CommandBinding Command="{x:Static local:BillEntryView.cmdRefresh}"
+                        Executed="ExecuteCmdRefresh"
+                        CanExecute="CanExecuteCmdRefresh"/>
+        <CommandBinding Command="{x:Static local:BillEntryView.cmdClear}"
+                        Executed="ExecuteCmdClear"
+                        CanExecute="CanExecuteCmdClear"/>
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" CommandParameter="add"
+					Command="{x:Static local:BillEntryView.cmdAdd}" />
+        <KeyBinding Gesture="Control+S" CommandParameter="save"
+					Command="{x:Static local:BillEntryView.cmdSave}" />
+        <KeyBinding Key="D" Modifiers="Control" CommandParameter="delete"
+					Command="{x:Static local:BillEntryView.cmdDelete}"/>
+        <KeyBinding Key="R" Modifiers="Control" CommandParameter="refresh"
+					Command="{x:Static local:BillEntryView.cmdRefresh}"/>
+        <KeyBinding Key="C" Modifiers="Control" CommandParameter="clear"
+					Command="{x:Static local:BillEntryView.cmdClear}"/>
+    </UserControl.InputBindings>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" BorderBrush="#FFDADADA" BorderThickness="0,0,0,1">
+        </Border>
+
+        <Grid Grid.Column="0" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Row="0" Margin="7,7,7,5">
+                <TextBlock Text="Search" Style="{StaticResource TextBlockStyle}" Margin="0,0,0,7" />
+
+                <telerik:RadMaskedTextBox x:Name="txtSearch" MaskType="None" EmptyContent="Enter Search Text" Margin="0,0,0,5"
+                                          ValueChanged="txtSearch_ValueChanged" IsEnabled="False" Style="{StaticResource Search_TextBoxStyle}" 
+                                          KeyDown="txtSearch_KeyDown" />
+
+                <telerik:RadButton x:Name="btnSearch" Height="25" Width="100" HorizontalAlignment="Right" Command="{x:Static local:BillEntryView.cmdRefresh}" 
+                                   IsTabStop="False" ToolTip="Refresh Search Result (Ctrl+R)">
+                    <telerik:RadButton.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/refresh.png"  Height="16" Width="16" Stretch="Fill" />
+                            <TextBlock Text=" Refresh"/>
+                        </StackPanel>
+                    </telerik:RadButton.Content>
+                </telerik:RadButton>
+            </StackPanel>
+
+            <Border Grid.Row="1" Margin="7,5,7,-5">
+                <Border x:Name="bdSearch" Margin="0" Background="#79256b">
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <Image Source="/Images/find.png" Height="16" Width="16" Stretch="Fill" Margin="2,0,4,0"/>
+                        <TextBlock Text="Search Result" Style="{StaticResource TextBlockStyle_search}" />
+                    </StackPanel>
+                </Border>
+            </Border>
+
+            <telerik:RadGridView Grid.Row="2" x:Name="rgSearch" Margin="7" CanUserFreezeColumns="False" AutoGenerateColumns="False"
+                                 ColumnWidth="*" IsReadOnly="True" CanUserReorderColumns="False" CanUserResizeColumns="False" 
+                                 ShowGroupPanel="False" IsFilteringAllowed="False" IsSynchronizedWithCurrentItem="True"
+                                 MouseDoubleClick="rgSearch_MouseDoubleClick" KeyboardNavigation.TabNavigation="Once" KeyDown="rgSearch_KeyDown"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Auto" ShowColumnFooters="True">
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewDataColumn UniqueName="VoucherNo" Header="Item No." Width="auto">
+                        <telerik:GridViewDataColumn.AggregateFunctions>
+                            <telerik:CountFunction Caption="Count: "/>
+                        </telerik:GridViewDataColumn.AggregateFunctions>
+                    </telerik:GridViewDataColumn>
+
+                    <telerik:GridViewDataColumn UniqueName="ItemName" Header="Item Name" Width="auto" />
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
+
+            <Border Grid.Row="2" Background="#B1000000" Margin="7" Visibility="Collapsed"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="gridDC">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3" BorderBrush="#FFDADADA" BorderThickness="1,0,0,0">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="White" Offset="0.05"/>
+                        <GradientStop Color="#FFF7F7F7"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#FFD6D6D6" BorderThickness="0,0,0,1" Margin="50,5,50,5">
+                    <TextBlock Text="Item Entry" Style="{StaticResource TextBlockStyle}" Margin="0,2,0,5"  HorizontalAlignment="Center"/>
+                </Border>
+
+                <telerik:RadBusyIndicator x:Name="biMain" IsBusy="False" IsTabStop="False" Grid.Row="1" Grid.Column="0" Margin="7">
+                    <Grid x:Name="stkMain">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <TextBlock Text="Item Number" Margin="0,0,5,0"  Style="{StaticResource TextBlockStyle1}" VerticalAlignment="Center"/>
+                            <telerik:RadMaskedTextBox x:Name="txtItemNo" MaskType="None" EmptyContent="Enter Item No." Width="100" IsReadOnly="True">
+                                <telerik:RadMaskedTextBox.Value>
+                                    <Binding RelativeSource="{RelativeSource Self}" Path="Value" UpdateSourceTrigger="Explicit">
+                                        <Binding.ValidationRules>
+                                            <val:RequiredValidationRule ErrorMessage="Required Item Number." />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </telerik:RadMaskedTextBox.Value>
+                            </telerik:RadMaskedTextBox>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="#79256b" Width="20"/>
+                            <TextBlock Grid.Column="1" Text="Stock Item" Margin="5,0,5,0"  Style="{StaticResource TextBlockStyle2}" VerticalAlignment="Center" />
+                            <Border Grid.Column="2" Background="#79256b" />
+                        </Grid>
+
+                        <StackPanel Grid.Row="2" Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                <TextBlock Text="Item Name" Style="{StaticResource TextBlockStyle1}" VerticalAlignment="Center"/>
+                                <telerik:RadMaskedTextBox x:Name="txtItemName" MaskType="None" Width="300" Margin="5,0,0,0" EmptyContent="Enter Item Name"
+                                                          SelectionOnFocus="SelectAll" MaxLength="100">
+                                    <telerik:RadMaskedTextBox.Value>
+                                        <Binding RelativeSource="{RelativeSource Self}" Path="Value" UpdateSourceTrigger="Explicit">
+                                            <Binding.ValidationRules>
+                                                <val:RequiredValidationRule ErrorMessage="Required Item Name." />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </telerik:RadMaskedTextBox.Value>
+                                </telerik:RadMaskedTextBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Grid Grid.Row="3" Margin="0,5,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="#79256b" Width="20"/>
+                            <TextBlock Grid.Column="1" Text="Remarks" Margin="5,0,5,0"  Style="{StaticResource TextBlockStyle2}" VerticalAlignment="Center" />
+                            <Border Grid.Column="2" Background="#79256b" />
+                        </Grid>
+
+                        <StackPanel Grid.Row="4" Orientation="Vertical">
+                            <telerik:RadMaskedTextBox x:Name="txtRemarks" MaskType="None" EmptyContent="Enter Remarks" Height="50" VerticalContentAlignment="Top"
+                                                      Value="{Binding Remarks}" SelectionOnFocus="SelectAll" MaxLength="200"/>
+                        </StackPanel>
+                    </Grid>
+                </telerik:RadBusyIndicator>
+
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="#FFDADADA" BorderThickness="1,1,0,0"     
+                                    VerticalAlignment="Bottom" Background="#CCF3F3F3">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <telerik:RadButton x:Name="btnAdd" Width="75" Margin="0,0,10,0" Command="{x:Static local:BillEntryView.cmdAdd}"            
+                                           ToolTip="Create a new Item (Ctrl+N)">
+                            <telerik:RadButton.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/add.png"  Height="16" Width="16" Stretch="Fill" />
+                                    <TextBlock Text=" New"/>
+                                </StackPanel>
+                            </telerik:RadButton.Content>
+                        </telerik:RadButton>
+
+                        <telerik:RadButton x:Name="btnSave" Width="75" Margin="0,0,10,0" Command="{x:Static local:BillEntryView.cmdSave}"
+                                           ToolTip="Save the current Item information (Ctrl+S)">
+                            <telerik:RadButton.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/save.png"  Height="16" Width="16" Stretch="Fill" />
+                                    <TextBlock Text=" Save"/>
+                                </StackPanel>
+                            </telerik:RadButton.Content>
+                        </telerik:RadButton>
+
+                        <telerik:RadButton x:Name="btnDelete" Width="75" Margin="0,0,10,0" Command="{x:Static local:BillEntryView.cmdDelete}"
+                                           ToolTip="Delete the current Item from the database (Ctrl+D)">
+                            <telerik:RadButton.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/delete.png"  Height="16" Width="16" Stretch="Fill" />
+                                    <TextBlock Text=" Delete"/>
+                                </StackPanel>
+                            </telerik:RadButton.Content>
+                        </telerik:RadButton>
+
+                        <telerik:RadButton x:Name="btnClear" Width="75" Margin="0,0,10,0" ToolTip="Clear the current Bill Entry (Ctrl+C)"
+                                           Command="{x:Static local:BillEntryView.cmdClear}">
+                            <telerik:RadButton.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/page.png"  Height="16" Width="16" Stretch="Fill" />
+                                    <TextBlock Text=" Clear"/>
+                                </StackPanel>
+                            </telerik:RadButton.Content>
+                        </telerik:RadButton>
+
+                        <TextBlock x:Name="txtMsg" VerticalAlignment="Center" Style="{StaticResource TextBlockStyle_msg}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

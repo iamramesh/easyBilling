@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 11.375" name="eBillingDC">
+  <DataContextMoniker Name="/eBillingDCDataContext" />
+  <nestedChildShapes>
+    <classShape Id="074f43bb-3c4d-423c-9eb7-7446c4b1264b" absoluteBounds="5.625, 0.5, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/eBillingDCDataContext/Form" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0e0e376a-6ce3-4953-a0d6-0ca8bba09897" absoluteBounds="5.64, 0.96, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6666c9f6-068b-45a6-b522-157d859bae2b" absoluteBounds="5.75, 2, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/eBillingDCDataContext/Setting" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4c144ce1-839d-4047-a128-f93190ec0840" absoluteBounds="5.765, 2.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a2d29823-3a3d-4183-baac-5f50b53b8dcb" absoluteBounds="2.875, 3.5, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/eBillingDCDataContext/BillDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f1edeb5e-8f87-407e-892a-a052bc4bb507" absoluteBounds="2.89, 3.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="12e9159b-22f8-4a6b-97ac-061fc10c394d" absoluteBounds="5.625, 6.25, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/eBillingDCDataContext/VW_BillDetail_New" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4c940d26-fc6e-4936-8659-571f7e20df0d" absoluteBounds="5.64, 6.71, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7ecb266c-d5ac-4b58-af0b-9d55efea3c0a" absoluteBounds="2.875, 6.125, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/eBillingDCDataContext/VW_BillDetail_Update" />
+      <nestedChildShapes>
+        <elementListCompartment Id="146a4bc3-edb4-4191-a353-8fd78f48ddf4" absoluteBounds="2.89, 6.585, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="91cbe536-1897-4d03-99bc-ca966f27ae4a" absoluteBounds="0.5, 7, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/eBillingDCDataContext/AppUse" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1c751b19-8d92-49fa-99ac-8821953ff590" absoluteBounds="0.51500000000000012, 7.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="461be82c-dc3d-4630-9920-52965167f337" absoluteBounds="0.5, 3.5, 2, 3.3093082682291666">
+      <DataClassMoniker Name="/eBillingDCDataContext/BillHeader" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ed72b09a-8ad5-4725-ba98-f8dcbf7db7a3" absoluteBounds="0.51500000000000012, 3.96, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3b1eaa15-7d1f-4680-abab-abd7f58eeb7a" absoluteBounds="5.75, 4, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/eBillingDCDataContext/Local" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d125101e-d55b-47c4-a6a8-1e412970d575" absoluteBounds="5.765, 4.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="aff5c601-d03d-4ff0-962b-6db0f57e7a19" absoluteBounds="0.5, 0.5, 2, 2.5401025390625">
+      <DataClassMoniker Name="/eBillingDCDataContext/StockItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bf090ae4-9571-43e4-af96-60ffdec752f2" absoluteBounds="0.515, 0.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b4a3991d-4d7e-4eec-a53d-f4acd77f7176" absoluteBounds="2.875, 0.5, 2, 2.5401025390625">
+      <DataClassMoniker Name="/eBillingDCDataContext/Customer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0d315cee-d701-4240-a2e7-3103f94591c4" absoluteBounds="2.89, 0.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="499919e6-52f2-4b38-9f25-eb2396354845" absoluteBounds="0.5, 9.125, 2, 1.9631982421875">
+      <DataClassMoniker Name="/eBillingDCDataContext/vw_SalesReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="74fa23ec-61d3-49dd-9627-3602842e0604" absoluteBounds="0.51500000000000012, 9.585, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
