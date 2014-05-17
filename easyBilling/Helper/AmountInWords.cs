@@ -5,8 +5,12 @@ namespace easyBilling.Helper
 {
     public class AmountInWords
     {
+<<<<<<< HEAD
         //for test
 	//ramesh
+=======
+        //for test ramesh
+>>>>>>> e1db09dfb78609ae72939b39a3c822b2cf5f44f3
         
         public String changeNumericToWords(double numb)
         {
